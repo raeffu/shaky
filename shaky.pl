@@ -1,25 +1,28 @@
-connect(room1, room2).
-connect(room2, room3).
-connect(room3, room4).
+connected(room1, room2).
+connected(room2, room3).
+connected(room3, room4).
 
-connect(room5, room6).
-connect(room5, room7).
+connected(room5, room6).
+connected(room5, room7).
 
-connect(X, Y):-
-    connect(X, Z),
-    connect(Z, Y).
+path(X, X).
+%% path(X, Y):-
+%%     connected(X, Y).
+path(X, Z):-
+    connected(Y, Z),
+    path(X, Y).
 
 inRoom(shaky, room1).
 inRoom(redBox, room4).
 
 inRoom(blueBox, room0).
 
-inRoom(Object, RoomY):-
+goTo(Object, RoomY):-
     % append on stack
     inRoom(Object, RoomX),
-    connect(RoomX, RoomY).
+    path(RoomX, RoomY).
 
 get(Box, Agent):-
     % append on stack
-    inRoom(Agent, RoomX),
-    inRoom(Box, RoomX).
+    inRoom(Box, RoomX),
+    goTo(Agent, RoomX).
